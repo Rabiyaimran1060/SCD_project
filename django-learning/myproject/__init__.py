@@ -1,1 +1,0 @@
-# spp package initialization
