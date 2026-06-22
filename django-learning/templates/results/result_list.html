@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Marks & Results | SPP{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold h3 mb-1 text-white">Marks & Results Ledger</h1>
+        <p class="text-muted mb-0">Record and edit academic grades, term tests, assignments, and exam results.</p>
+    </div>
+    <a href="{% url 'result_add' %}" class="btn btn-primary-custom">
+        <i class="fa-solid fa-plus me-2"></i>Enter Marks
+    </a>
+</div>
+
+<!-- Search Bar -->
+<div class="glass-card p-4 mb-4">
+    <form method="GET" action="{% url 'result_list' %}" class="row g-3">
+        <div class="col-md-9 col-lg-10">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--border-color); color: var(--text-muted);">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" name="q" value="{{ q }}" class="form-control border-start-0" placeholder="Search by student name, course name, or course code...">
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-2">
+            <button type="submit" class="btn btn-primary-custom w-100">Search</button>
+        </div>
+    </form>
+</div>
+
+<!-- Results Table -->
+<div class="glass-card p-4">
+    <div class="table-responsive">
+        {% if results %}
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Mid-Term (30)</th>
+                        <th>Assignments (20)</th>
+                        <th>Final Exam (50)</th>
+                        <th>Total (100)</th>
+                        <th>Grade</th>
+                        <th>GPA</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                        <tr>
+                            <td class="text-white fw-semibold">{{ result.student.name }}</td>
+                            <td>
+                                <div class="text-white fw-bold">{{ result.course.code }}</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">{{ result.course.name }}</div>
+                            </td>
+                            <td>{{ result.mid_term_marks }}</td>
+                            <td>{{ result.assignments_marks }}</td>
+                            <td>{{ result.final_exam_marks }}</td>
+                            <td class="text-white fw-bold">{{ result.total_marks }}</td>
+                            <td>
+                                <span class="badge {% if result.grade == 'A' %}bg-success{% elif result.grade == 'B' %}bg-primary{% elif result.grade == 'C' %}bg-info{% elif result.grade == 'D' %}bg-warning{% else %}bg-danger{% endif %} text-white py-1 px-2" style="font-size: 0.75rem;">
+                                    {{ result.grade }}
+                                </span>
+                            </td>
+                            <td>{{ result.gpa|floatformat:1 }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'result_edit' result.pk %}" class="btn btn-secondary-custom btn-sm py-1 px-2 text-warning">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <a href="{% url 'result_delete' result.pk %}" class="btn btn-secondary-custom btn-sm py-1 px-2 text-danger">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fa-solid fa-square-poll-vertical fs-1 mb-3 text-secondary"></i>
+                <p class="mb-0">No results recorded yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

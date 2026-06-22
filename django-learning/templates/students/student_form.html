@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} | SPP{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'student_list' %}" class="btn btn-secondary-custom btn-sm">
+        <i class="fa-solid fa-arrow-left me-2"></i>Back to Registry
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card p-5">
+            <h3 class="fw-bold text-white mb-4"><i class="fa-solid fa-graduation-cap text-primary me-2"></i>{{ title }}</h3>
+            
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-danger py-2" role="alert" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444; font-size: 0.85rem;">
+                        Please fix the errors below.
+                    </div>
+                {% endif %}
+                
+                <div class="mb-3">
+                    <label for="id_name" class="form-label text-muted fw-semibold" style="font-size: 0.8rem;">Full Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ form.name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_roll_no" class="form-label text-muted fw-semibold" style="font-size: 0.8rem;">Roll Number</label>
+                    {{ form.roll_no }}
+                    {% if form.roll_no.errors %}
+                        <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ form.roll_no.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label for="id_email" class="form-label text-muted fw-semibold" style="font-size: 0.8rem;">Email Address</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="id_attendance_pct" class="form-label text-muted fw-semibold" style="font-size: 0.8rem;">Attendance Percentage</label>
+                        {{ form.attendance_pct }}
+                        <div class="form-text text-muted" style="font-size: 0.7rem;">Enter percentage out of 100.</div>
+                        {% if form.attendance_pct.errors %}
+                            <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ form.attendance_pct.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <label for="id_study_hours_per_week" class="form-label text-muted fw-semibold" style="font-size: 0.8rem;">Study Hours per Week</label>
+                        {{ form.study_hours_per_week }}
+                        <div class="form-text text-muted" style="font-size: 0.7rem;">Self-study hours outside class.</div>
+                        {% if form.study_hours_per_week.errors %}
+                            <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ form.study_hours_per_week.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3">Save Student</button>
+                    <a href="{% url 'student_list' %}" class="btn btn-secondary-custom w-100 py-3 d-flex align-items-center justify-content-center">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

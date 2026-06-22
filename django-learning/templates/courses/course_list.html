@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses | SPP{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold h3 mb-1 text-white">Academic Courses</h1>
+        <p class="text-muted mb-0">Manage university modules, syllabi references, and code structures.</p>
+    </div>
+    <a href="{% url 'course_add' %}" class="btn btn-primary-custom">
+        <i class="fa-solid fa-plus me-2"></i>Add Course
+    </a>
+</div>
+
+<!-- Search Bar -->
+<div class="glass-card p-4 mb-4">
+    <form method="GET" action="{% url 'course_list' %}" class="row g-3">
+        <div class="col-md-9 col-lg-10">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--border-color); color: var(--text-muted);">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" name="q" value="{{ q }}" class="form-control border-start-0" placeholder="Search by course name or course code...">
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-2">
+            <button type="submit" class="btn btn-primary-custom w-100">Search</button>
+        </div>
+    </form>
+</div>
+
+<!-- Courses Grid / Table -->
+<div class="glass-card p-4">
+    <div class="table-responsive">
+        {% if courses %}
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Course Code</th>
+                        <th style="width: 35%">Name</th>
+                        <th style="width: 35%">Description</th>
+                        <th style="width: 15%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                        <tr>
+                            <td class="text-white fw-bold">{{ course.code }}</td>
+                            <td class="text-white fw-semibold">{{ course.name }}</td>
+                            <td style="color: #cbd5e1; font-size: 0.9rem;">{{ course.description|default:"No description provided." }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'course_edit' course.pk %}" class="btn btn-secondary-custom btn-sm py-1 px-2 text-warning">
+                                        <i class="fa-solid fa-pen"></i> Edit
+                                    </a>
+                                    <a href="{% url 'course_delete' course.pk %}" class="btn btn-secondary-custom btn-sm py-1 px-2 text-danger">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fa-solid fa-book-open fs-1 mb-3 text-secondary"></i>
+                <p class="mb-0">No courses registered yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
